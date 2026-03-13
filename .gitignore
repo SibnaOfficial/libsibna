@@ -1,0 +1,17 @@
+# Rust
+/target
+/Cargo.lock
+**/*.rs.bk
+
+# IDEs
+.vscode/
+.idea/
+
+# Testing artifacts
+*.log
+test_run*
+errors_v*
+
+# OS junk
+.DS_Store
+Thumbs.db
