@@ -310,7 +310,7 @@ You may choose either license for your use.
 
 ## Acknowledgments
 
-- Signal Protocol design by Open Whisper Systems
+- Sibna Protocol designed by the Sibna Team – providing secure communication and cryptographic building blocks for modern applications.
 - RustCrypto team for cryptographic primitives
 - Dalek Cryptography for curve25519-dalek
 
