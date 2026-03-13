@@ -318,8 +318,8 @@ You may choose either license for your use.
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 8.0.0 | 2024 | Security hardened edition |
-| 7.0.0 | 2023 | Initial release |
+| 0.8.0 | 2026 | Security hardened edition |
+| 0.2.0 | 2020 | Initial release |
 
 ---
 
