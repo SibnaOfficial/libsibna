@@ -1,7 +1,7 @@
 # Sibna Protocol v0.8.1 - Ultra Secure Edition
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-8.0.0-blue.svg" alt="Version">
+  <img src="https://img.shields.io/badge/version-0.8.1-blue.svg" alt="Version">
   <img src="https://img.shields.io/badge/security-audited-green.svg" alt="Security">
   <img src="https://img.shields.io/badge/license-Apache%202.0%20%7C%20MIT-orange.svg" alt="License">
 </p>
@@ -318,8 +318,8 @@ You may choose either license for your use.
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 0.8.0 | 2026 | Security hardened edition |
-| 0.2.0 | 2020 | Initial release |
+| 0.8.1 | 2026 | Security hardened edition |
+| 0.2.1 | 2020 | Initial release |
 
 ---
 
