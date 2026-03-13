@@ -1,4 +1,4 @@
-# Sibna Protocol v8 - Ultra Secure Edition
+# Sibna Protocol v0.8.1 - Ultra Secure Edition
 
 <p align="center">
   <img src="https://img.shields.io/badge/version-8.0.0-blue.svg" alt="Version">
