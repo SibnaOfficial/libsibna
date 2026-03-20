@@ -178,4 +178,4 @@ Before deploying:
 
 ---
 
-**Last Updated**: 2024
+**Last Updated**: 2026

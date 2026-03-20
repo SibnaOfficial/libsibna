@@ -1,7 +1,7 @@
-# Sibna Protocol v0.8.1 - Ultra Secure Edition
+# Sibna Protocol v9.0.0 — Production Hardened Edition
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-0.8.1-blue.svg" alt="Version">
+  <img src="https://img.shields.io/badge/version-9.0.0-blue.svg" alt="Version">
   <img src="https://img.shields.io/badge/security-audited-green.svg" alt="Security">
   <img src="https://img.shields.io/badge/license-Apache%202.0%20%7C%20MIT-orange.svg" alt="License">
 </p>
@@ -79,7 +79,7 @@
 
 ```toml
 [dependencies]
-sibna-core = "8.0.0"
+sibna-core = "9.0.0"
 ```
 
 ### Python SDK

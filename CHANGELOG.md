@@ -5,6 +5,49 @@ All notable changes to the Sibna Protocol will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [9.0.0] - 2026-03-20
+
+### Security — Critical fixes
+
+* **HKDF session init**: Replaced dual `expand()` on same PRK with single 64-byte expand + split
+* **QR code mac_key**: Removed secret MAC key from serialized QR payload (was leaking private key)
+* **Shared secret exposure**: `perform_handshake()` no longer returns raw shared_secret to caller
+* **chain.rs derive_key**: Fixed `?` operator used inside non-Result return type (compile/panic bug)
+* **keystore::from_bytes**: Converted from panic-on-error to `ProtocolResult<Self>`
+
+### Security — High severity fixes
+
+* **Group DoS prevention**: Added `MAX_SKIP_GROUP=500` bound in `GroupSession::decrypt()`
+* **Encryptor counter**: Fixed `initial_message_number=u64::MAX` → `0` (broke replay detection)
+* **session.rs panics**: Replaced 4 `.unwrap()` calls in `skip_message_keys()` with `?`
+* **add_group_member**: Propagated `ProtocolResult` from `add_member()` (was silently ignored)
+* **builder.rs panic**: Replaced `SecureRandom::new().unwrap()` with proper error propagation
+* **constant_time_cmp**: Documented as non-constant-time, hidden from public API
+
+### Security — Medium severity fixes
+
+* **MAX_AD_LEN alignment**: Unified validation limit (1024→256) with crypto layer limit
+* **FFI last_error**: Implemented thread-local error storage (was always returning generic message)
+* **burst_tokens init**: Fixed initialization to `0` from `100` (rate limiter was ineffective initially)
+* **X3DH HKDF salt**: Replaced empty `&[]` salt with domain-separation constant
+* **Debug log files**: Removed 30 `errors_v*.log` files from repository
+
+### Changed
+
+* Version bumped to 9.0.0
+* `bincode` dependency: replaced RC version `2.0.0-rc.3` with stable `1.3.3`
+* `aes-gcm` dependency: removed (unused, increases attack surface)
+* Integration tests: completely rewritten with realistic scenarios
+
+### Added
+
+* `.github/workflows/ci.yml` — CI/CD with security audit, Miri, cross-platform tests
+* `deny.toml` — cargo-deny dependency policy (license + advisory + ban rules)
+* `clippy.toml` — strict clippy configuration
+* `rustfmt.toml` — unified code formatting
+* `.cargo/config.toml` — build configuration and shortcuts
+* `CONTRIBUTING.md` — security-first contribution guidelines
+
 ## [8.0.0] - 2024-XX-XX
 
 ### Security
