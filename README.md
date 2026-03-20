@@ -8,7 +8,7 @@
 
 ## Overview
 
-**Sibna Protocol v0.8.1** is a professionally audited, hardened implementation of the Signal Protocol for secure end-to-end encrypted communication. This version addresses all security vulnerabilities found in previous versions and implements industry best practices for cryptographic software.
+**Sibna Protocol v9.0.)** is a professionally audited, hardened implementation of the Signal Protocol for secure end-to-end encrypted communication. This version addresses all security vulnerabilities found in previous versions and implements industry best practices for cryptographic software.
 
 ## Security Features
 
