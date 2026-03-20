@@ -13,8 +13,10 @@ use zeroize::{Zeroize, ZeroizeOnDrop, Zeroizing};
 /// Message header size
 const MESSAGE_HEADER_SIZE: usize = 8 + 8 + 8; // message_number + timestamp + padding
 
-/// Maximum message age in seconds (5 minutes)
-const MAX_MESSAGE_AGE_SECS: u64 = 300;
+/// Maximum message age in seconds (24 hours - allows offline/delayed delivery)
+/// Note: This Encryptor-level check is a secondary defense; Double Ratchet provides
+/// forward secrecy. Tighten to 300 for high-security deployments.
+const MAX_MESSAGE_AGE_SECS: u64 = 86400;
 
 /// Clock skew tolerance in seconds (30 seconds)
 const CLOCK_SKEW_TOLERANCE_SECS: u64 = 30;

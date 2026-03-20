@@ -161,14 +161,10 @@ impl SecureContext {
     /// # Security Note
     /// If no master password is provided, a random key is generated.
     pub fn new(config: Config, master_password: Option<&[u8]>) -> ProtocolResult<Self> {
-        // Validate password if provided
+        // Validate password if provided - use unified validation rules
         if let Some(password) = master_password {
-            if password.is_empty() {
-                return Err(ProtocolError::InvalidArgument);
-            }
-            if password.len() < 8 {
-                return Err(ProtocolError::WeakPassword);
-            }
+            validation::validate_password(password)
+                .map_err(|_| ProtocolError::WeakPassword)?;
         }
 
         // Derive storage key from password or generate random
@@ -278,7 +274,7 @@ impl SecureContext {
             return Err(ProtocolError::InvalidKeyLength);
         }
 
-        let keypair = crate::keystore::IdentityKeyPair::from_bytes(ed_pub, x_pub, seed);
+        let keypair = crate::keystore::IdentityKeyPair::from_bytes(ed_pub, x_pub, seed)?;
         self.keystore.write().set_identity(keypair)
     }
 
@@ -364,7 +360,9 @@ impl SecureContext {
         let session_arc = Arc::new(RwLock::new(session));
         sessions.insert_session(peer_id, session_arc.clone())?;
 
-        Ok(output.shared_secret.to_vec())
+        // FIX: Do NOT return raw shared_secret to caller - it belongs only to the session.
+        // Callers use encrypt_message/decrypt_message via the session.
+        Ok(peer_id.to_vec()) // Return peer_id as session identifier
     }
 
     /// Encrypt a message for a session
@@ -388,11 +386,13 @@ impl SecureContext {
 
         let sessions = self.sessions.read();
         let session = sessions.get_session(session_id)?;
+        drop(sessions); // release outer lock before acquiring inner state write lock
 
-        let session = session.read();
+        // DoubleRatchetSession::encrypt uses internal RwLock::write on state
+        let session_guard = session.read();
         let ad = associated_data.unwrap_or_default();
 
-        session.encrypt(plaintext, ad)
+        session_guard.encrypt(plaintext, ad)
     }
 
     /// Decrypt a message from a session
@@ -411,11 +411,13 @@ impl SecureContext {
 
         let sessions = self.sessions.read();
         let session = sessions.get_session(session_id)?;
+        drop(sessions); // release outer lock before acquiring inner state write lock
 
-        let session = session.read();
+        // DoubleRatchetSession::decrypt uses internal RwLock::write on state
+        let session_guard = session.read();
         let ad = associated_data.unwrap_or_default();
 
-        session.decrypt(ciphertext, ad)
+        session_guard.decrypt(ciphertext, ad)
     }
 
     /// Create a new group
@@ -470,7 +472,7 @@ impl SecureContext {
         let mut groups = self.groups.write();
         let group = groups.get_group_mut(group_id)
             .ok_or_else(|| ProtocolError::InvalidState)?;
-        group.add_member(public_key);
+        group.add_member(public_key)?;
         Ok(())
     }
 
@@ -530,6 +532,18 @@ impl SecureContext {
         }
 
         true
+    }
+}
+
+
+impl Zeroize for SecureContext {
+    fn zeroize(&mut self) {
+        // storage_key is Zeroizing<[u8;32]> — already zeroed on drop
+        // keystore, sessions, groups contain their own ZeroizeOnDrop fields
+        // device_id is non-sensitive (public identifier)
+        if let Ok(mut key) = self.storage_key.try_write() {
+            key.zeroize();
+        }
     }
 }
 

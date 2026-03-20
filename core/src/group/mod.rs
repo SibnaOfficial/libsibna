@@ -350,6 +350,12 @@ impl GroupSession {
             return Err(ProtocolError::InvalidMessage);
         }
 
+        // FIX: Bound the number of skipped messages to prevent DoS.
+        // An attacker sending message_number=2^32-1 would exhaust CPU.
+        const MAX_SKIP_GROUP: u32 = 500;
+        if message.message_number > sender_key.message_number + MAX_SKIP_GROUP {
+            return Err(ProtocolError::MaxSkippedMessagesExceeded);
+        }
         // Derive message keys until we reach the target
         while sender_key.message_number < message.message_number {
             sender_key.next_message_key()?;
@@ -464,15 +470,14 @@ impl GroupMessage {
 
     /// Serialize to bytes
     pub fn to_bytes(&self) -> ProtocolResult<Vec<u8>> {
-        bincode::serde::encode_to_vec(self, bincode::config::standard())
+        bincode::serialize(self)
             .map_err(|_| ProtocolError::SerializationError)
     }
 
     /// Deserialize from bytes
     pub fn from_bytes(data: &[u8]) -> ProtocolResult<Self> {
-        bincode::serde::decode_from_slice(data, bincode::config::standard())
+        bincode::deserialize(data)
             .map_err(|_| ProtocolError::DeserializationError)
-            .map(|(msg, _)| msg)
     }
 }
 
@@ -497,6 +502,7 @@ impl GroupManager {
     }
 
     /// Create a new group
+    /// Create a new group session
     pub fn create_group(&mut self, group_id: GroupId) -> ProtocolResult<&mut GroupSession> {
         // Check group limit
         if self.groups.len() >= self.max_groups {
@@ -507,7 +513,7 @@ impl GroupManager {
         session.initialize_sender_key()?;
         
         self.groups.insert(group_id, session);
-        Ok(self.groups.get_mut(&group_id).unwrap())
+        self.groups.get_mut(&group_id).ok_or(crate::error::ProtocolError::InternalError)
     }
 
     /// Get a group session

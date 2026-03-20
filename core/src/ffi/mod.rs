@@ -3,8 +3,9 @@
 //! Provides C-compatible FFI bindings for integrating with other languages.
 //! All functions are designed to be safe and prevent memory corruption.
 
-use std::ffi::{c_void, CStr, CString};
-use std::os::raw::{c_char, c_int, c_uint, c_ulonglong};
+use std::cell::RefCell;
+use std::ffi::{c_void, CString};
+use std::os::raw::c_char;
 use std::slice;
 use std::ptr;
 use zeroize::Zeroize;
@@ -373,10 +374,20 @@ pub extern "C" fn sibna_free_buffer(buffer: *mut ByteBuffer) {
     }
 }
 
+// FIX: Thread-local last error storage for FFI callers
+thread_local! {
+    static LAST_ERROR: RefCell<String> = RefCell::new(String::new());
+}
+
+/// Set the thread-local last error message (internal use)
+fn set_last_error(msg: &str) {
+    LAST_ERROR.with(|e| { *e.borrow_mut() = msg.to_string(); });
+}
+
 /// Get the last error message
 ///
 /// # Arguments
-/// * `buffer` - Output buffer for error message
+/// * `buffer` - Output buffer for error message  
 /// * `buffer_len` - Length of output buffer
 ///
 /// # Returns
@@ -386,9 +397,12 @@ pub extern "C" fn sibna_last_error(
     buffer: *mut c_char,
     buffer_len: usize,
 ) -> SibnaResult {
-    // In a real implementation, this would store and retrieve the last error
-    // For now, just return a generic error message
-    let error_msg = "An error occurred\0";
+    // FIX: Returns actual last error message from thread-local storage
+    let error_msg_owned = LAST_ERROR.with(|e| {
+        let s = e.borrow();
+        if s.is_empty() { "No error\0".to_string() } else { format!("{}\0", s) }
+    });
+    let error_msg = error_msg_owned.as_str();
     
     if buffer.is_null() {
         return SibnaResult::InvalidArgument;

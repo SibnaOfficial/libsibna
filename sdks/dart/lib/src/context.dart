@@ -116,15 +116,13 @@ class SibnaContext {
     Uint8List? associatedData,
   }) async {
     _ensureNotDisposed();
-
-    // This would use the session's encrypt method in production
-    // For now, use standalone crypto
-    final key = SibnaCrypto.generateKey();
-    try {
-      return SibnaCrypto.encrypt(key, plaintext, associatedData: associatedData);
-    } finally {
-      key.secureClear();
-    }
+    // BUG FIX: Previous implementation generated a NEW random key per call,
+    // making decryption impossible. Session-based encrypt must use the session key.
+    // This requires native library integration - throw until properly implemented.
+    throw UnimplementedError(
+      'encryptMessage requires native library and an established session. '
+      'Call createSession() first, then use SibnaSession.encrypt().',
+    );
   }
 
   /// Decrypt a message from a session

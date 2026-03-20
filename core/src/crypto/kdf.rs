@@ -355,6 +355,16 @@ impl KeyDeriver {
             KdfAlgorithm::HkdfSha256 => {
                 HkdfKdf::derive_iterated(password, salt, info, params.iterations)
             }
+            KdfAlgorithm::HkdfSha512 => {
+                // FIX: implement HkdfSha512 properly using SHA-512
+                use hkdf::Hkdf;
+                use sha2::Sha512;
+                let hkdf = Hkdf::<Sha512>::new(Some(salt), password);
+                let mut okm = [0u8; KEY_LENGTH];
+                hkdf.expand(info, &mut okm)
+                    .map_err(|_| CryptoError::KeyDerivationFailed)?;
+                Ok(zeroize::Zeroizing::new(okm))
+            }
             KdfAlgorithm::SimpleSha256 => SimpleKdf::derive_sha256(password, salt),
             KdfAlgorithm::SimpleSha512 => SimpleKdf::derive_sha512(password, salt),
             #[cfg(feature = "argon2")]
@@ -365,7 +375,6 @@ impl KeyDeriver {
                 params.iterations,
                 params.parallelism,
             ),
-            _ => Err(CryptoError::KeyDerivationFailed),
         }
     }
 }

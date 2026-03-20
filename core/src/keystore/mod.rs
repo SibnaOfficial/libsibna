@@ -58,9 +58,9 @@ impl IdentityKeyPair {
     pub fn from_bytes(ed_pub: &[u8], x_pub: &[u8], seed: &[u8]) -> Self {
         use ed25519_dalek::SigningKey;
 
-        let ed25519_public: [u8; 32] = ed_pub.try_into().expect("Invalid Ed25519 public key length");
-        let x25519_public: [u8; 32] = x_pub.try_into().expect("Invalid X25519 public key length");
-        let seed: [u8; 32] = seed.try_into().expect("Invalid seed length");
+        let ed25519_public: [u8; 32] = match ed_pub.try_into() { Ok(k) => k, Err(_) => return Self { ed25519_secret: None, ed25519_public: [0u8; 32], x25519_secret: None, x25519_public: [0u8; 32], created_at: 0 } };
+        let x25519_public: [u8; 32] = x_pub.try_into().map_err(|_| crate::error::ProtocolError::InvalidKeyLength)?;
+        let seed: [u8; 32] = seed.try_into().map_err(|_| crate::error::ProtocolError::InvalidKeyLength)?;
 
         let signing_key = SigningKey::from_bytes(&seed);
         let x25519_secret = x25519_dalek::StaticSecret::from(seed);
@@ -70,13 +70,13 @@ impl IdentityKeyPair {
             .unwrap_or_default()
             .as_secs();
 
-        Self {
+        Ok(Self {
             ed25519_secret: Some(signing_key.to_bytes()),
             ed25519_public,
             x25519_secret: Some(x25519_secret),
             x25519_public,
             created_at,
-        }
+        })
     }
 
     /// Sign data with Ed25519

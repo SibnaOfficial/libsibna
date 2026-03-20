@@ -20,8 +20,10 @@ pub mod limits {
     pub const MAX_GROUP_ID_LEN: usize = 64;
     /// Minimum group ID length
     pub const MIN_GROUP_ID_LEN: usize = 1;
-    /// Maximum associated data length
-    pub const MAX_AD_LEN: usize = 1024;
+    /// Maximum associated data length - aligned with crypto layer limit (256 bytes)
+    /// FIX: Was 1024, but CryptoHandler::encrypt enforces MAX_INFO_LENGTH=256.
+    /// Using >256 bytes of AD would silently fail at crypto layer.
+    pub const MAX_AD_LEN: usize = 256;
     /// Maximum key size
     pub const MAX_KEY_SIZE: usize = 32;
     /// Minimum key size

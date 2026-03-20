@@ -2,7 +2,7 @@
 //!
 //! Builder pattern for constructing X3DH handshakes.
 
-use super::{HandshakeOutput, HandshakeRole, PreKeyBundle};
+use super::{HandshakeOutput, HandshakeRole, PreKeyBundle, HandshakeError};
 use crate::error::{ProtocolError, ProtocolResult};
 use crate::keystore::KeyStore;
 use crate::crypto::{SecureRandom, X3dhKdf, constant_time_eq};
@@ -161,7 +161,10 @@ impl HandshakeBuilder {
         Ok(X3dhHandshake {
             config: self.config,
             keystore,
-            random: self.random.unwrap_or_else(|| SecureRandom::new().unwrap()),
+            random: match self.random {
+                Some(r) => r,
+                None => SecureRandom::new().map_err(|_| HandshakeError::InvalidState)?,
+            },
             role,
             peer_identity_key: self.peer_identity_key,
             peer_signed_prekey: self.peer_signed_prekey,

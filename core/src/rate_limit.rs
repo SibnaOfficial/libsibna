@@ -93,7 +93,7 @@ impl Default for ClientCounter {
             last_hour: now,
             last_day: now,
             cooldown_until: None,
-            burst_tokens: 100, // Will be capped to burst_size on first check
+            burst_tokens: 0, // FIX: Start at 0; tokens are granted on first refill call
             last_refill: now,
         }
     }
@@ -432,12 +432,16 @@ impl RateLimiter {
         }
     }
 
-    /// Enable/disable global rate limiting
+    /// Enable/disable global rate limiting.
+    /// Must be called before the limiter is shared across threads.
+    /// Call via: `rate_limiter.write().set_global_enabled(false);`
     pub fn set_global_enabled(&mut self, enabled: bool) {
         self.global_enabled = enabled;
     }
 
-    /// Set global RPS
+    /// Set global requests-per-second limit.
+    /// Must be called before the limiter is shared across threads.
+    /// Call via: `rate_limiter.write().set_global_rps(200);`
     pub fn set_global_rps(&mut self, rps: u32) {
         self.global_rps = rps;
     }

@@ -15,6 +15,48 @@ use x25519_dalek::{StaticSecret, PublicKey};
 
 /// Handshake result containing shared secrets and keys
 #[derive(Clone)]
+
+/// Errors specific to the handshake process
+#[derive(Debug, Clone)]
+pub enum HandshakeError {
+    /// Protocol state is invalid for this operation
+    InvalidState,
+    /// Key material is invalid
+    InvalidKey,
+    /// Handshake timed out
+    Timeout,
+    /// Signature verification failed
+    SignatureVerification,
+    /// Missing required key
+    MissingKey,
+}
+
+impl std::fmt::Display for HandshakeError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::InvalidState          => write!(f, "Invalid handshake state"),
+            Self::InvalidKey            => write!(f, "Invalid key material"),
+            Self::Timeout               => write!(f, "Handshake timed out"),
+            Self::SignatureVerification => write!(f, "Signature verification failed"),
+            Self::MissingKey            => write!(f, "Missing required key"),
+        }
+    }
+}
+
+impl std::error::Error for HandshakeError {}
+
+impl From<HandshakeError> for crate::error::ProtocolError {
+    fn from(e: HandshakeError) -> Self {
+        match e {
+            HandshakeError::InvalidState          => Self::InvalidState,
+            HandshakeError::InvalidKey            => Self::InvalidKey,
+            HandshakeError::Timeout               => Self::Timeout,
+            HandshakeError::SignatureVerification => Self::InvalidSignature,
+            HandshakeError::MissingKey            => Self::KeyNotFound,
+        }
+    }
+}
+
 pub struct HandshakeOutput {
     /// The shared secret derived from the handshake
     pub shared_secret: [u8; 32],

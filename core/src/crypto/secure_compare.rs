@@ -94,15 +94,13 @@ pub fn constant_time_copy(condition: bool, dst: &mut [u8], src: &[u8]) {
     }
 }
 
-/// Constant-time comparison that returns an ordering
+/// Lexicographic byte-slice comparison.
 ///
-/// Returns:
-/// - 0 if a == b
-/// - negative if a < b
-/// - positive if a > b
-///
-/// # Security
-/// This function performs constant-time comparison
+/// # SECURITY WARNING
+/// This function is NOT constant-time. Do NOT use for MAC or key comparison.
+/// Use `constant_time_eq()` for all security-sensitive comparisons.
+/// This function exists only for non-sensitive sorting/ordering operations.
+#[doc(hidden)] // Hide from public API to discourage misuse
 pub fn constant_time_cmp(a: &[u8], b: &[u8]) -> i8 {
     if a.len() != b.len() {
         // Return difference in lengths (not constant time, but lengths are public)

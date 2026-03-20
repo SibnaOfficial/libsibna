@@ -57,10 +57,10 @@ part 'src/group.dart';
 part 'src/safety_number.dart';
 
 /// SDK Version
-const String sibnaVersion = '8.0.0';
+const String sibnaVersion = '9.0.0'; // '9.0.0';
 
 /// Protocol version number
-const int protocolVersion = 8;
+const int protocolVersion = 9;
 
 /// Minimum compatible version
 const int minCompatibleVersion = 7;

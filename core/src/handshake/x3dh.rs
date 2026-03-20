@@ -224,7 +224,8 @@ impl X3dhSessionKeys {
             b"SibnaExtraKey2_v8",
         ];
 
-        let keys = HkdfKdf::derive_multiple(shared_secret, &[], infos)?;
+        // FIX: Use a proper domain-separation salt instead of empty slice
+        let keys = HkdfKdf::derive_multiple(shared_secret, b"SibnaX3DH_SessionKeys_v8", infos)?;
 
         if keys.len() < 3 {
             return Err(ProtocolError::KeyDerivationFailed);

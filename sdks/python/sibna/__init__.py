@@ -199,8 +199,8 @@ class IdentityKeyPair:
     
     def sign(self, data: bytes) -> bytes:
         """Sign data with the identity key."""
-        # Implementation would call native library
-        return b""
+        # TODO: Call native library via FFI
+        raise NotImplementedError("Session encrypt requires compiled native library")
     
     def verify(self, data: bytes, signature: bytes) -> bool:
         """Verify a signature."""
@@ -230,8 +230,8 @@ class Session:
         Returns:
             Encrypted ciphertext
         """
-        # Implementation would call native library
-        return b""
+        # TODO: Call native library via FFI
+        raise NotImplementedError("Session decrypt requires compiled native library")
     
     def decrypt(self, ciphertext: bytes, associated_data: Optional[bytes] = None) -> bytes:
         """

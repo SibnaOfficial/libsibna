@@ -22,7 +22,6 @@ argon2 = ["dep:argon2"]
 x25519-dalek = { workspace = true }
 ed25519-dalek = { workspace = true }
 chacha20poly1305 = { workspace = true }
-aes-gcm = { workspace = true }
 hkdf = { workspace = true }
 hmac = { workspace = true }
 sha2 = { workspace = true }
@@ -55,13 +54,6 @@ parking_lot = { workspace = true }
 dashmap = { workspace = true }
 once_cell = { workspace = true }
 libc = { workspace = true, optional = true }
-
-# Database
-sled = { workspace = true }
-redb = { workspace = true }
-
-# Async
-tokio = { workspace = true, optional = true }
 
 # WASM
 wasm-bindgen = { workspace = true, optional = true }
