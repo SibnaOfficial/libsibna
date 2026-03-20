@@ -1,6 +1,6 @@
-# Sibna Protocol v8 - Analysis and Fixes Walkthrough
+# Sibna Protocol v9 - Analysis and Fixes Walkthrough
 
-I have completed a comprehensive analysis of the Sibna Protocol v8 codebase, identifying and fixing several security vulnerabilities, logic errors, and build configuration issues.
+I have completed a comprehensive analysis of the Sibna Protocol v9 codebase, identifying and fixing several security vulnerabilities, logic errors, and build configuration issues.
 
 ## 🛠️ Fixes Summary
 
@@ -46,4 +46,4 @@ All SDKs were found to be logically consistent with the fixed core implementatio
 > The protocol is now fully functional, securely hardened, and verified with a comprehensive test suite covering X3DH handshakes, double ratchet sessions, and rate limiting.
 
 ---
-*Developed by Antigravity*
+*Developed by Sibna*
