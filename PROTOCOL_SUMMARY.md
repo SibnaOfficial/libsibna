@@ -1,8 +1,8 @@
-# Sibna Protocol v8 - Security Hardened Summary
+# Sibna Protocol v9 - Security Hardened Summary
 
 ## Executive Summary
 
-This document summarizes the security-hardened version of the Sibna Protocol (v8.0.0), which addresses all critical vulnerabilities found in previous versions and implements industry best practices for cryptographic software.
+This document summarizes the security-hardened version of the Sibna Protocol (v9.0.0), which addresses all critical vulnerabilities found in previous versions and implements industry best practices for cryptographic software.
 
 ## Vulnerabilities Fixed
 
@@ -253,7 +253,7 @@ sibna-protocol-v8-secure/
 
 ## Migration from v7
 
-1. Update dependencies to v8.0.0
+1. Update dependencies to v9.0.0
 2. Review configuration options
 3. Update error handling
 4. Test thoroughly
@@ -267,6 +267,6 @@ sibna-protocol-v8-secure/
 
 ---
 
-**Version**: 8.0.0  
+**Version**: 9.0.0  
 **Last Updated**: 2024  
 **Status**: Production Ready
