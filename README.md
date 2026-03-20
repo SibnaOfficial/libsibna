@@ -1,4 +1,4 @@
-# Sibna Protocol v9.0.0 — Production Hardened Edition
+# Sibna Protocol v9.0.0 
 
 <p align="center">
   <img src="https://img.shields.io/badge/version-9.0.0-blue.svg" alt="Version">
