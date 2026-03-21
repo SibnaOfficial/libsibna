@@ -57,13 +57,13 @@ part 'src/group.dart';
 part 'src/safety_number.dart';
 
 /// SDK Version
-const String sibnaVersion = '9.0.0'; // '9.0.0';
+const String sibnaVersion = '9.0.0';
 
 /// Protocol version number
 const int protocolVersion = 9;
 
 /// Minimum compatible version
-const int minCompatibleVersion = 7;
+const int minCompatibleVersion = 8;
 
 /// Maximum message size (10 MB)
 const int maxMessageSize = 10 * 1024 * 1024;

@@ -1,4 +1,4 @@
-//! Key Derivation Functions - Hardened Edition
+//! Key Derivation Functions - Production Hardened Edition v9
 //!
 //! Provides secure key derivation using HKDF and Argon2.
 
@@ -120,7 +120,7 @@ impl RatchetKdf {
         let hkdf = Hkdf::<Sha256>::new(Some(root_key), dh_out);
 
         let mut okm = [0u8; 64];
-        hkdf.expand(b"SibnaRatchet_v8", &mut okm)
+        hkdf.expand(b"SibnaRatchet_v9", &mut okm)
             .map_err(|_| CryptoError::KeyDerivationFailed)?;
 
         let mut new_rk = [0u8; KEY_LENGTH];
@@ -195,7 +195,7 @@ impl X3dhKdf {
         let hkdf = Hkdf::<Sha256>::new(None, &concatenated);
         let mut okm = [0u8; KEY_LENGTH];
 
-        hkdf.expand(b"SibnaX3DH_v8", &mut okm)
+        hkdf.expand(b"SibnaX3DH_v9", &mut okm)
             .map_err(|_| CryptoError::KeyDerivationFailed)?;
 
         concatenated.zeroize();

@@ -1,4 +1,4 @@
-//! Secure Random Number Generation - Hardened Edition v8.1
+//! Secure Random Number Generation - Production Hardened Edition v9
 //!
 //! Provides cryptographically secure random number generation
 //! with entropy mixing. All panics replaced with proper error propagation.

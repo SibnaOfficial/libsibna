@@ -107,7 +107,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
-- `sibna_protocol_v7` module (use `sibna_protocol_v8` instead)
+- `sibna_protocol_v7` and `sibna_protocol_v8` modules (use `sibna_core` v9 instead)
 - Direct access to session state (use provided methods)
 - Manual key rotation (use automatic rotation)
 
@@ -156,12 +156,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Migration Guide
 
-### From v7 to v8
+### From v7/v8 to v9
 
 1. **Update Dependencies**
    ```toml
    [dependencies]
-   sibna-core = "8.0.0"
+   sibna-core = "9.0.0"
    ```
 
 2. **Update Configuration**
@@ -200,13 +200,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Security Advisories
 
-### CVE-2024-XXXX (Fixed in 8.0.0)
+### Internal hardening (Fixed in 9.0.0)
 **Severity**: Critical
 **Description**: Memory leak in key storage could expose private keys
 **Impact**: Private key exposure
 **Fix**: All keys now properly zeroized on drop
 
-### CVE-2024-XXXX (Fixed in 8.0.0)
+### Internal hardening (Fixed in 9.0.0)
 **Severity**: High
 **Description**: Insecure serialization could leak session state
 **Impact**: Session state exposure

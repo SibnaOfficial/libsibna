@@ -1,4 +1,4 @@
-//! Error types for the Sibna Protocol v8 - Hardened Edition
+//! Error types for the Sibna Protocol v9 - Production Hardened Edition
 //!
 //! This module defines all error types used throughout the protocol.
 //! All errors are designed to prevent information leakage.

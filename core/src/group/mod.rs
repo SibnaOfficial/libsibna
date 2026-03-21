@@ -89,12 +89,12 @@ impl SenderKey {
         
         // Derive message key
         let mut message_key = [0u8; 32];
-        hkdf.expand(b"SibnaGroupMessageKey_v8", &mut message_key)
+        hkdf.expand(b"SibnaGroupMessageKey_v9", &mut message_key)
             .map_err(|_| ProtocolError::KeyDerivationFailed)?;
         
         // Advance chain key
         let mut next_chain = [0u8; 32];
-        hkdf.expand(b"SibnaGroupChainKey_v8", &mut next_chain)
+        hkdf.expand(b"SibnaGroupChainKey_v9", &mut next_chain)
             .map_err(|_| ProtocolError::KeyDerivationFailed)?;
         
         // Securely update chain key

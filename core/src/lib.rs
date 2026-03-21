@@ -1,4 +1,4 @@
-//! Sibna Protocol v8 - Ultra Secure Edition
+//! Sibna Protocol v9 - Production Hardened Edition
 //!
 //! A professionally audited, hardened implementation of the Signal Protocol
 //! for secure end-to-end encrypted communication.
@@ -14,7 +14,7 @@
 //! - Timing Attack Resistance
 //!
 //! # Version
-//! 8.0.0 - Security Hardened
+//! 9.0.0 - Production Hardened
 
 #![warn(missing_docs)]
 #![warn(unsafe_op_in_unsafe_fn)]
@@ -58,13 +58,13 @@ use zeroize::{Zeroize, ZeroizeOnDrop};
 use x25519_dalek::{PublicKey, StaticSecret};
 
 /// Protocol version
-pub const VERSION: &str = "8.0.0";
+pub const VERSION: &str = "9.0.0";
 
 /// Protocol version number for compatibility
-pub const VERSION_NUMBER: u32 = 8;
+pub const VERSION_NUMBER: u32 = 9;
 
 /// Minimum compatible version
-pub const MIN_COMPATIBLE_VERSION: u32 = 7;
+pub const MIN_COMPATIBLE_VERSION: u32 = 8;
 
 /// Main System Context for secure communication
 ///
@@ -173,7 +173,7 @@ impl SecureContext {
             let key = crypto::kdf::HkdfKdf::derive_iterated(
                 password,
                 &salt,
-                b"SibnaStorageKey_v8",
+                b"SibnaStorageKey_v9",
                 10000,
             )?;
             key

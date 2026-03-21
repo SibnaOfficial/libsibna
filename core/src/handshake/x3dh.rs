@@ -217,15 +217,17 @@ impl X3dhSessionKeys {
         use crate::crypto::kdf::HkdfKdf;
 
         let infos: &[&[u8]] = &[
-            b"SibnaSendingKey_v8",
-            b"SibnaReceivingKey_v8",
-            b"SibnaAuthKey_v8",
-            b"SibnaExtraKey1_v8",
-            b"SibnaExtraKey2_v8",
+            // NOTE: _v9 suffix is part of the on-wire format.
+            // Changing these breaks interoperability — bump to v10 if you change the format.
+            b"SibnaSendingKey_v9",
+            b"SibnaReceivingKey_v9",
+            b"SibnaAuthKey_v9",
+            b"SibnaExtraKey1_v9",
+            b"SibnaExtraKey2_v9",
         ];
 
         // FIX: Use a proper domain-separation salt instead of empty slice
-        let keys = HkdfKdf::derive_multiple(shared_secret, b"SibnaX3DH_SessionKeys_v8", infos)?;
+        let keys = HkdfKdf::derive_multiple(shared_secret, b"SibnaX3DH_SessionKeys_v9", infos)?;
 
         if keys.len() < 3 {
             return Err(ProtocolError::KeyDerivationFailed);

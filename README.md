@@ -16,7 +16,7 @@
 
 ---
 
-> ⚠️ **Security notice:** Sibna Protocol has undergone internal security hardening (16 fixes across critical/high/medium severity in v9). An **independent external audit has not yet been performed**. Do not use this library in production systems handling sensitive data until an external audit is complete. See [Security](#security) for details.
+> Warning: **Security notice:** Sibna Protocol has undergone internal security hardening (16 fixes across critical/high/medium severity in v9). An **independent external audit has not yet been performed**. Do not use this library in production systems handling sensitive data until an external audit is complete. See [Security](#security) for details.
 
 ---
 
@@ -56,7 +56,7 @@ Sibna Protocol    →  build your own app, your own servers, Apache-2.0 / MIT
 | Windows x86_64 (MSVC) | ✅ | `sibna.dll` |
 | Android (arm64, armv7, x86_64) | ✅ | `libsibna.so` |
 | iOS arm64 | ✅ | `libsibna.a` (static) |
-| WASM | 🔜 | planned |
+| WASM | Planned | planned |
 
 ## SDK support
 
