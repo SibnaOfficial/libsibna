@@ -1,121 +1,127 @@
-# Sibna Protocol v9.0.0 
+# Sibna Protocol
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-9.0.0-blue.svg" alt="Version">
-  <img src="https://img.shields.io/badge/security-audited-green.svg" alt="Security">
+  <img src="https://img.shields.io/badge/version-9.0.0-534AB7.svg" alt="v9.0.0">
+  <img src="https://img.shields.io/badge/security-hardened-1D9E75.svg" alt="Security Hardened">
+  <img src="https://img.shields.io/badge/audit-pending-BA7517.svg" alt="External Audit Pending">
   <img src="https://img.shields.io/badge/license-Apache%202.0%20%7C%20MIT-orange.svg" alt="License">
+  <img src="https://img.shields.io/badge/rust-1.75%2B-orange.svg" alt="Rust 1.75+">
+  <img src="https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20macOS%20%7C%20Android%20%7C%20iOS-blue.svg" alt="Platforms">
 </p>
 
-## Overview
+<p align="center">
+  A production-hardened Signal Protocol implementation in Rust.<br>
+  Same cryptographic guarantees as Signal — under your full control.
+</p>
 
-**Sibna Protocol v9.0.)** is a professionally audited, hardened implementation of the Signal Protocol for secure end-to-end encrypted communication. This version addresses all security vulnerabilities found in previous versions and implements industry best practices for cryptographic software.
+---
 
-## Security Features
+> ⚠️ **Security notice:** Sibna Protocol has undergone internal security hardening (16 fixes across critical/high/medium severity in v9). An **independent external audit has not yet been performed**. Do not use this library in production systems handling sensitive data until an external audit is complete. See [Security](#security) for details.
 
-### Core Security
-- ✅ **X3DH Key Agreement** - Extended Triple Diffie-Hellman with constant-time operations
-- ✅ **Double Ratchet Algorithm** - Forward secrecy and post-compromise security
-- ✅ **Memory Zeroization** - All sensitive data securely cleared from memory
-- ✅ **Constant-Time Operations** - Protection against timing attacks
-- ✅ **Replay Protection** - Prevents message replay attacks
-- ✅ **Rate Limiting** - DoS protection for cryptographic operations
+---
 
-### Advanced Security
-- ✅ **Group Messaging** - Sender Keys with forward secrecy
-- ✅ **Multi-device Support** - Secure synchronization across devices
-- ✅ **Safety Numbers** - Identity verification to prevent MITM attacks
-- ✅ **Key Rotation** - Automatic key rotation for long-lived sessions
-- ✅ **Input Validation** - Comprehensive validation of all inputs
-- ✅ **Entropy Mixing** - Secure random number generation
+## What is Sibna?
 
-## Protocol Components
+Sibna is a **protocol library**, not an application. It implements the [Signal Protocol](https://signal.org/docs/) — X3DH key agreement + Double Ratchet — in Rust, and exposes it through SDKs for Flutter, Python, TypeScript, C++, and Dart.
 
-### 1. Cryptographic Core (`crypto/`)
-- **ChaCha20-Poly1305** AEAD encryption
-- **HKDF** key derivation
-- **HMAC-SHA256** message authentication
-- **X25519** elliptic curve Diffie-Hellman
-- **Ed25519** digital signatures
+**Use Sibna when you want to build your own E2E-encrypted application** without depending on Signal's infrastructure or its license.
 
-### 2. Double Ratchet (`ratchet/`)
-- Session state management
-- Chain key derivation
-- Message key management
-- Out-of-order message handling
-- Skipped message key storage
-
-### 3. X3DH Handshake (`handshake/`)
-- Prekey bundle management
-- Identity verification
-- Shared secret derivation
-- Handshake state machine
-
-### 4. Key Store (`keystore/`)
-- Identity key pairs
-- Signed prekeys
-- One-time prekeys
-- Secure key storage
-
-### 5. Group Messaging (`group/`)
-- Sender key management
-- Group session handling
-- Member management
-- Epoch-based key rotation
-
-### 6. Safety Numbers (`safety/`)
-- Identity fingerprinting
-- QR code generation
-- Verification protocols
-
-### 7. Rate Limiting (`rate_limit/`)
-- Per-operation limits
-- Per-client tracking
-- Burst handling
-- Cooldown periods
-
-## Installation
-
-### Rust (Core Library)
-
-```toml
-[dependencies]
-sibna-core = "9.0.0"
+```
+Signal (the app)  →  ready-made, runs on Signal's servers, GPLv3
+Sibna Protocol    →  build your own app, your own servers, Apache-2.0 / MIT
 ```
 
-### Python SDK
+---
 
-```bash
-pip install sibna-protocol
-```
+## Features
 
-### JavaScript/TypeScript SDK
+- **X3DH key agreement** — Extended Triple Diffie-Hellman with domain-separated HKDF
+- **Double Ratchet** — forward secrecy and post-compromise security per session
+- **ChaCha20-Poly1305** — AEAD encryption, faster than AES on devices without hardware AES-NI
+- **Group messaging** — Sender Keys with epoch-based rotation and bounded skip
+- **Safety numbers** — 80-digit human-verifiable identity fingerprints
+- **Rate limiting** — DoS protection on every cryptographic entry point
+- **Memory zeroization** — all key material zeroed on drop via `ZeroizeOnDrop`
+- **Zero production panics** — every error path returns `Result`, no `.unwrap()` in production code
+- **Multi-platform** — Windows, Linux, macOS, Android, iOS
 
-```bash
-npm install sibna-protocol
-```
+---
 
-## Quick Start
+## Platform support
+
+| Platform | Status | Output |
+|---|---|---|
+| Linux x86_64 | ✅ | `libsibna.so` |
+| macOS (arm64, x86_64) | ✅ | `libsibna.dylib` |
+| Windows x86_64 (MSVC) | ✅ | `sibna.dll` |
+| Android (arm64, armv7, x86_64) | ✅ | `libsibna.so` |
+| iOS arm64 | ✅ | `libsibna.a` (static) |
+| WASM | 🔜 | planned |
+
+## SDK support
+
+| Language | Path | Status |
+|---|---|---|
+| Rust | `core/` | ✅ Complete |
+| Flutter / Dart | `sdks/flutter/` | ✅ Complete (session E2E pending FFI exposure) |
+| Python | `sdks/python/` | ✅ Crypto layer complete |
+| TypeScript | `sdks/javascript/` | ✅ Crypto layer complete |
+| C++ | `sdks/cpp/` | ✅ Headers complete |
+| Dart (standalone) | `sdks/dart/` | ✅ Complete |
+
+---
+
+## Quick start
 
 ### Rust
 
+```toml
+# Cargo.toml
+[dependencies]
+sibna-core = { path = "./core" }
+```
+
 ```rust
 use sibna_core::{SecureContext, Config};
+use sibna_core::crypto::{CryptoHandler, KeyGenerator};
 
-// Create a secure context
-let config = Config::default();
-let ctx = SecureContext::new(config, Some(b"master_password"))?;
+// Create a context — password needs uppercase + lowercase + digit, ≥8 chars
+let ctx = SecureContext::new(Config::default(), Some(b"MyStr0ngPass!"))?;
 
-// Generate identity
+// Generate an identity key pair
 let identity = ctx.generate_identity()?;
 
-// Create a session
-let session = ctx.create_session(b"peer_id")?;
+// Standalone encryption (no session required)
+let key     = KeyGenerator::generate_key()?;
+let handler = CryptoHandler::new(key.as_ref())?;
 
-// Encrypt a message
-let encrypted = ctx.encrypt_message(b"peer_id", b"Hello, World!", None)?;
+let ciphertext = handler.encrypt(b"Hello, World!", b"associated-data")?;
+let plaintext  = handler.decrypt(&ciphertext, b"associated-data")?;
+```
 
-// Decrypt a message
-let decrypted = ctx.decrypt_message(b"peer_id", &encrypted, None)?;
+### Flutter
+
+```yaml
+# pubspec.yaml
+dependencies:
+  sibna_flutter:
+    path: ./sdks/flutter
+```
+
+```dart
+import 'package:sibna_flutter/sibna_flutter.dart';
+
+// Initialize once, before runApp()
+await SibnaFlutter.initialize();
+
+// Standalone crypto
+final key = SibnaCrypto.generateKey();
+final ct  = SibnaCrypto.encrypt(key, plaintext, associatedData: aad);
+final pt  = SibnaCrypto.decrypt(key, ct, associatedData: aad);
+
+// Identity verification — show to user for out-of-band comparison
+final sn = SibnaSafetyNumber.calculate(myPublicKey, theirPublicKey);
+print(sn.formatted); // "12345 67890 12345 ..."
 ```
 
 ### Python
@@ -123,75 +129,195 @@ let decrypted = ctx.decrypt_message(b"peer_id", &encrypted, None)?;
 ```python
 import sibna
 
-# Create a secure context
-ctx = sibna.Context(password=b"master_password")
-
-# Generate identity
-identity = ctx.generate_identity()
-
-# Create a session
-session = ctx.create_session(b"peer_id")
-
-# Encrypt a message
-encrypted = session.encrypt(b"Hello, World!")
-
-# Decrypt a message
-decrypted = session.decrypt(encrypted)
+key        = sibna.Crypto.generate_key()
+ciphertext = sibna.Crypto.encrypt(key, b"Hello, World!")
+plaintext  = sibna.Crypto.decrypt(key, ciphertext)
 ```
 
-### JavaScript/TypeScript
+### TypeScript
 
 ```typescript
-import { Context, Crypto, init } from 'sibna-protocol';
+import { Crypto, init } from 'sibna-protocol';
 
-// Initialize WASM
 await init();
 
-// Create a secure context
-const ctx = new Context("master_password");
-
-// Generate a key
-const key = Crypto.generateKey();
-
-// Encrypt data
+const key       = Crypto.generateKey();
 const encrypted = Crypto.encrypt(key, new TextEncoder().encode("Hello, World!"));
-
-// Decrypt data
 const decrypted = Crypto.decrypt(key, encrypted);
 ```
 
-## Security Audit Results
+---
 
-### Vulnerabilities Fixed in v8
+## Building the native library
 
-| Severity | Count | Description |
-|----------|-------|-------------|
-| Critical | 3 | Memory leaks, serialization issues, key storage |
-| High | 5 | Input validation, rate limiting, authentication |
-| Medium | 4 | Group messaging, FFI safety, error handling |
-| Low | 2 | Documentation, performance |
+```bash
+# Linux / macOS
+cargo build --release --package sibna-core --features ffi
 
-### Security Improvements
+# Windows (MSVC) — do NOT add crt-static on Windows MSVC
+cargo build --release --package sibna-core --features ffi \
+  --target x86_64-pc-windows-msvc
 
-1. **Memory Management**
-   - All keys zeroized on drop
-   - Secure memory allocation
-   - Protection against memory dumps
+# Android (requires NDK r26+)
+cargo build --release --features ffi --target aarch64-linux-android
+cargo build --release --features ffi --target armv7-linux-androideabi
+cargo build --release --features ffi --target x86_64-linux-android
 
-2. **Input Validation**
-   - Comprehensive bounds checking
-   - Type validation
-   - Sanitization of all inputs
+# iOS
+cargo build --release --features ffi --target aarch64-apple-ios
+```
 
-3. **Cryptographic Operations**
-   - Constant-time comparison
-   - Side-channel resistance
-   - Secure random generation
+| Platform | Output path |
+|---|---|
+| Linux | `target/release/libsibna.so` |
+| macOS | `target/release/libsibna.dylib` |
+| Windows | `target/release/sibna.dll` |
+| Android | `target/<ABI>/release/libsibna.so` |
+| iOS | `target/aarch64-apple-ios/release/libsibna.a` |
 
-4. **Session Management**
-   - Automatic key rotation
-   - Session timeout handling
-   - Secure state serialization
+---
+
+## Repository structure
+
+```
+sibna-protc/
+├── core/src/
+│   ├── crypto/         ChaCha20-Poly1305, HKDF, HMAC, random, key generation
+│   ├── ratchet/        Double Ratchet — chain, session, state management
+│   ├── handshake/      X3DH — builder, protocol, prekey bundles
+│   ├── keystore/       Identity, signed prekeys, one-time prekeys
+│   ├── group/          Sender Keys, epoch-based rotation
+│   ├── safety/         Safety numbers, QR code verification
+│   ├── rate_limit/     Per-operation, per-client DoS protection
+│   ├── validation/     Input bounds and type checking
+│   ├── ffi/            C-compatible FFI for all language SDKs
+│   └── lib.rs          SecureContext — main public API
+├── sdks/
+│   ├── flutter/        Flutter plugin (Android, iOS, Windows, Linux, macOS)
+│   ├── dart/           Standalone Dart SDK
+│   ├── python/         Python SDK
+│   ├── javascript/     TypeScript SDK
+│   └── cpp/            C++ headers and source
+├── tests/
+│   └── integration_tests.rs   20 end-to-end integration tests
+├── .github/workflows/ci.yml   CI: audit, deny, clippy, miri, cross-platform
+├── deny.toml                  Dependency policy — licenses, advisories, bans
+├── clippy.toml                Strict clippy configuration
+└── rustfmt.toml               Unified code formatting
+```
+
+---
+
+## Cryptographic primitives
+
+| Primitive | Algorithm | Crate |
+|---|---|---|
+| AEAD encryption | ChaCha20-Poly1305 | `chacha20poly1305` (RustCrypto) |
+| Key agreement | X25519 | `x25519-dalek` (dalek-cryptography) |
+| Digital signatures | Ed25519 | `ed25519-dalek` (dalek-cryptography) |
+| Key derivation | HKDF-SHA256 / HKDF-SHA512 | `hkdf` (RustCrypto) |
+| Message authentication | HMAC-SHA256 | `hmac` (RustCrypto) |
+| Hash | SHA-256, SHA-512, SHA-3 | `sha2`, `sha3` (RustCrypto) |
+| Randomness | OS CSPRNG | `getrandom` |
+| Zeroization | Automatic on drop | `zeroize` |
+
+All cryptographic crates are from [RustCrypto](https://github.com/RustCrypto) or [dalek-cryptography](https://github.com/dalek-cryptography). These upstream libraries have received independent security reviews.
+
+---
+
+## Internal security hardening — v9
+
+v9 resolved 16 issues found during internal code review. **This is not a substitute for an independent external audit.**
+
+| Severity | Count | Examples |
+|---|---|---|
+| Critical | 5 | `mac_key` leaked in QR payload · `shared_secret` returned to API caller · HKDF `expand()` called twice on same PRK |
+| High | 6 | Group decrypt DoS via unbounded skip · `Encryptor` counter init at `u64::MAX` · 4 production panics in `skip_message_keys` |
+| Medium | 5 | `MAX_AD_LEN` mismatch between validation and crypto layers · FFI always-generic error string · `burst_tokens=100` bypassed rate limiter on init |
+
+**Result:** zero `.unwrap()` / `.expect()` outside `#[cfg(test)]` blocks.
+
+Full details in [CHANGELOG.md](CHANGELOG.md).
+
+---
+
+## Security
+
+Sibna Protocol has been internally reviewed and hardened. It has **not undergone an independent external security audit by a specialized cryptography firm**.
+
+This is a meaningful distinction. For any deployment handling sensitive data — medical records, financial information, communications that could endanger people — an external audit is required before deployment.
+
+**To report a vulnerability:**
+
+Email [security@sibna.dev](mailto:security@sibna.dev). Do not open public GitHub issues for security reports.
+
+Please include: a description of the issue, steps to reproduce, potential impact, and a suggested fix if you have one.
+
+See [SECURITY.md](SECURITY.md) for the full responsible disclosure policy.
+
+---
+
+## Threat model
+
+**Protected against:**
+- Passive eavesdropping — ChaCha20-Poly1305 with unique nonces per message
+- Active MITM — safety number verification
+- Forward secrecy compromise — Double Ratchet key rotation
+- Post-compromise recovery — ratchet re-keying on new DH round
+- Replay attacks — per-session message counter and deduplication
+- Timing side-channels — constant-time comparisons throughout
+- Memory disclosure — `ZeroizeOnDrop` on all key material
+- DoS on crypto operations — rate limiter on every entry point
+
+**Outside the threat model:**
+- Device-level compromise (OS or hardware attacker)
+- Safety number verification skipped by the user
+- Traffic metadata — who communicates, when, and how often
+- No external audit has been conducted — this is a known and acknowledged gap
+
+---
+
+## Running the tests
+
+```bash
+# All tests
+cargo test --all
+
+# Strict linting (matches CI)
+cargo clippy --all-targets -- \
+  -D warnings \
+  -D clippy::unwrap_used \
+  -D clippy::expect_used \
+  -D clippy::panic
+
+# Dependency vulnerability audit
+cargo audit
+
+# Dependency policy (licenses, advisories, banned crates)
+cargo deny check
+
+# Undefined behaviour check — Linux only, nightly required
+cargo +nightly miri test --package sibna-core \
+  crypto::secure_compare crypto::random -- --test-threads=1
+```
+
+---
+
+## Performance
+
+Indicative benchmarks on Apple M2 (single-threaded, release build):
+
+| Operation | Approximate time |
+|---|---|
+| X25519 key generation | ~10 µs |
+| X3DH handshake | ~80 µs |
+| Message encryption (1 KB) | ~5 µs |
+| Message decryption (1 KB) | ~5 µs |
+| Safety number calculation | ~50 µs |
+
+Run `cargo bench` on your target hardware for accurate figures.
+
+---
 
 ## Configuration
 
@@ -199,130 +325,52 @@ const decrypted = Crypto.decrypt(key, encrypted);
 use sibna_core::Config;
 
 let config = Config {
-    enable_forward_secrecy: true,
-    enable_post_compromise_security: true,
-    max_skipped_messages: 2000,
-    key_rotation_interval: 86400, // 24 hours
-    handshake_timeout: 30,
-    message_buffer_size: 1024,
+    max_skipped_messages:   500,                // bounded — prevents memory exhaustion
+    key_rotation_interval:  86_400,             // seconds (24 h)
+    handshake_timeout:      30,
     enable_group_messaging: true,
-    max_group_size: 256,
-    enable_rate_limiting: true,
-    max_message_size: 10 * 1024 * 1024, // 10 MB
-    session_timeout_secs: 3600, // 1 hour
-    auto_prune_keys: true,
-    max_key_age_secs: 30 * 86400, // 30 days
+    max_group_size:         256,
+    enable_rate_limiting:   true,
+    max_message_size:       10 * 1024 * 1024,   // 10 MB
+    session_timeout_secs:   3_600,              // 1 h
+    auto_prune_keys:        true,
+    max_key_age_secs:       30 * 86_400,        // 30 days
     ..Default::default()
 };
 ```
 
-## API Reference
-
-### Core Types
-
-- `SecureContext` - Main entry point for protocol operations
-- `DoubleRatchetSession` - Individual encrypted session
-- `IdentityKeyPair` - User identity keys
-- `PreKeyBundle` - X3DH prekey bundle
-- `GroupSession` - Group messaging session
-- `SafetyNumber` - Identity verification
-
-### Cryptographic Functions
-
-- `encrypt(key, plaintext, associated_data)` - AEAD encryption
-- `decrypt(key, ciphertext, associated_data)` - AEAD decryption
-- `generate_key()` - Generate random 32-byte key
-- `random_bytes(length)` - Generate random bytes
-
-## Performance
-
-Benchmarks on Intel Core i7-12700K:
-
-| Operation | Time |
-|-----------|------|
-| Key Generation | ~50 µs |
-| X3DH Handshake | ~200 µs |
-| Message Encryption | ~15 µs |
-| Message Decryption | ~12 µs |
-| Group Message | ~25 µs |
-
-## Security Considerations
-
-### Threat Model
-
-**Protected Against:**
-- Passive eavesdropping
-- Active MITM attacks (with verification)
-- Forward secrecy compromise
-- Post-compromise attacks
-- Replay attacks
-- Timing attacks
-
-**Requires User Action:**
-- Safety number verification
-- Secure password storage
-- Device security
-
-### Best Practices
-
-1. **Always verify safety numbers** for new contacts
-2. **Use strong master passwords**
-3. **Enable automatic key rotation**
-4. **Regularly update to latest version**
-5. **Monitor rate limit alerts**
-
-## Testing
-
-```bash
-# Run all tests
-cargo test
-
-# Run with coverage
-cargo tarpaulin
-
-# Run benchmarks
-cargo bench
-```
+---
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
+See [CONTRIBUTING.md](CONTRIBUTING.md). The short version:
 
-## Security Disclosure
+- No `.unwrap()` or `.expect()` outside `#[cfg(test)]`
+- No custom cryptographic primitives — use existing audited crates only
+- All public API must include documentation with security notes
+- Run `cargo clippy`, `cargo audit`, and `cargo fmt` before submitting a PR
 
-If you discover a security vulnerability, please email security@sibna.dev with:
-- Description of the vulnerability
-- Steps to reproduce
-- Potential impact
-- Suggested fix (if any)
+---
 
 ## License
 
-This project is dual-licensed under:
-- Apache License 2.0
+Dual-licensed under your choice of:
+
+- [Apache License 2.0](LICENSE)
 - MIT License
 
-You may choose either license for your use.
+Commercial use is permitted under both licenses.
+
+---
 
 ## Acknowledgments
 
-- Sibna Protocol designed by the Sibna Team – providing secure communication and cryptographic building blocks for modern applications.
-- RustCrypto team for cryptographic primitives
-- Dalek Cryptography for curve25519-dalek
-
-## Version History
-
-| Version | Date | Changes |
-|---------|------|---------|
-| 0.8.1 | 2026 | Security hardened edition |
-| 0.2.1 | 2020 | Initial release |
+- [RustCrypto](https://github.com/RustCrypto) — cryptographic primitives
+- [dalek-cryptography](https://github.com/dalek-cryptography) — Curve25519 and Ed25519
+- [Signal Protocol specification](https://signal.org/docs/) — the cryptographic design this library implements
 
 ---
 
 <p align="center">
-  <strong>Secure Communication for Everyone</strong>
+  Rust · Apache-2.0 / MIT · External audit pending
 </p>
