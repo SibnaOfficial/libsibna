@@ -1,6 +1,6 @@
 # Sibna Protocol — Summary
 
-**Version:** 9.0.0  
+**Version:** 1.0.0  
 **Status:** Internally hardened — external audit pending  
 **Last updated:** March 2026
 

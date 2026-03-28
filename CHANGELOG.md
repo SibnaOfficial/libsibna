@@ -1,6 +1,6 @@
 # Changelog
 
-## [10.0.0] - 2026-03-28
+## [1.0.0] - 2026-03-28
 ### Added
 - **Full FFI Session Lifecycle**: Added `sibna_generate_identity`, `sibna_generate_prekey_bundle`, `sibna_perform_handshake`, `sibna_session_encrypt`, and `sibna_session_decrypt` allowing full X3DH and Double Ratchet usage from C/C++/Flutter/Python via FFI.
 - **Persistent Keystore**: Added `save_to_disk` and `load_from_disk` to `KeyStore` allowing persistence of Identity and Prekeys to disk, encrypted with ChaCha20-Poly1305. Opt-in via `persistent` feature (using `sled`).
@@ -19,7 +19,7 @@ All notable changes to the Sibna Protocol will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [9.0.0] - 2026-03-20
+## [0.9.0] - 2026-03-20
 
 ### Security — Critical fixes
 
@@ -48,7 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Version bumped to 9.0.0
+* Version bumped to 0.9.0
 * `bincode` dependency: replaced RC version `2.0.0-rc.3` with stable `1.3.3`
 * `aes-gcm` dependency: removed (unused, increases attack surface)
 * Integration tests: completely rewritten with realistic scenarios
@@ -62,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `.cargo/config.toml` — build configuration and shortcuts
 * `CONTRIBUTING.md` — security-first contribution guidelines
 
-## [8.0.0] - 2024-XX-XX
+## [0.8.0] - 2024-XX-XX
 
 ### Security
 
@@ -214,13 +214,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Security Advisories
 
-### Internal hardening (Fixed in 9.0.0)
+### Internal hardening (Fixed in 1.0.0)
 **Severity**: Critical
 **Description**: Memory leak in key storage could expose private keys
 **Impact**: Private key exposure
 **Fix**: All keys now properly zeroized on drop
 
-### Internal hardening (Fixed in 9.0.0)
+### Internal hardening (Fixed in 1.0.0)
 **Severity**: High
 **Description**: Insecure serialization could leak session state
 **Impact**: Session state exposure

@@ -16,7 +16,7 @@
 
 ---
 
-> Warning: **Security notice:** Sibna Protocol has undergone internal security hardening (16 fixes across critical/high/medium severity in v9). An **independent external audit has not yet been performed**. Do not use this library in production systems handling sensitive data until an external audit is complete. See [Security](#security) for details.
+> Warning: **Security notice:** Sibna Protocol has undergone extensive internal security hardening (v1.0 baseline). An **independent external audit has not yet been performed**. Do not use this library in production systems handling sensitive data until an external audit is complete. See [Security](#security) for details.
 
 ---
 
@@ -225,9 +225,9 @@ All cryptographic crates are from [RustCrypto](https://github.com/RustCrypto) or
 
 ---
 
-## Internal security hardening — v9
+## Production Hardening — v1.0.0
 
-v9 resolved 16 issues found during internal code review. **This is not a substitute for an independent external audit.**
+The v1.0.0 release represents a significant hardening milestone, resolving numerous theoretical and practical issues identified during internal code review. **This is not a substitute for an independent external audit.**
 
 | Severity | Count | Examples |
 |---|---|---|

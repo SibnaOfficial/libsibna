@@ -8,7 +8,7 @@ import os
 import platform
 
 # Read version from __init__.py
-version = "8.0.0"
+version = "1.0.0"
 
 # Determine library name based on platform
 system = platform.system()

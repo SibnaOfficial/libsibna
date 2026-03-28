@@ -14,7 +14,7 @@
 //! - Timing Attack Resistance
 //!
 //! # Version
-//! 10.0.0 - Production Hardened
+//! 1.0.0 - Production Hardened
 
 #![warn(missing_docs)]
 #![warn(unsafe_op_in_unsafe_fn)]
