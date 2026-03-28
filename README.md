@@ -1,7 +1,7 @@
 # Sibna Protocol
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-9.0.0-534AB7.svg" alt="v9.0.0">
+  <img src="https://img.shields.io/badge/version-1.0.0-534AB7.svg" alt="v1.0.0">
   <img src="https://img.shields.io/badge/security-hardened-1D9E75.svg" alt="Security Hardened">
   <img src="https://img.shields.io/badge/audit-pending-BA7517.svg" alt="External Audit Pending">
   <img src="https://img.shields.io/badge/license-Apache%202.0%20%7C%20MIT-orange.svg" alt="License">
